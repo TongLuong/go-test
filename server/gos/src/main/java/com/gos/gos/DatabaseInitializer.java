@@ -35,11 +35,6 @@ public class DatabaseInitializer {
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
             String[] header = reader.readLine().split(","); // ignore first line
 
-            // test
-            User temp = new User();
-            temp.setSbd("123");
-            userRepository.save(temp);
-
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] data = line.split(",", header.length);
