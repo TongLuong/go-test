@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: gos
+
+  profiles:
+    active: "dev"
