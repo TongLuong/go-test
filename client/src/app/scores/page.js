@@ -2,34 +2,45 @@
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import React from "react";
-import axios from "axios";
 
 export default function Home() {
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+
   const [currSbd, setCurrSbd] = React.useState(null);
   const [scores, setScores] = React.useState([
-    {
-      sbd: "01000001",
-      toan: 8.4,
-      ngu_van: 6.75,
-      ngoai_ngu: 8.0,
-      vat_li: 6.0,
-      hoa_hoc: 5.25,
-      sinh_hoc: 5.0,
-      lich_su: "",
-      dia_li: "",
-      gdcd: "",
-      ma_ngoai_ngu: "N1",
-    },
+    // {
+    //   sbd: "01000001",
+    //   toan: 8.4,
+    //   ngu_van: 6.75,
+    //   ngoai_ngu: 8.0,
+    //   vat_li: 6.0,
+    //   hoa_hoc: 5.25,
+    //   sinh_hoc: 5.0,
+    //   lich_su: "",
+    //   dia_li: "",
+    //   gdcd: "",
+    //   ma_ngoai_ngu: "N1",
+    // },
   ]);
 
   const fetchData = async () => {
-    await axios({
-      method: "get",
-      url: `/scores/${commentId}`,
-      headers: {
-        Authorization: `Bearer ${JWT_loginToken}`,
-      },
-    });
+    await fetch(
+      baseUrl + `/scores/${currSbd}`,
+      {
+        method: "GET",
+      }
+    ).then(
+      async res => {
+        const data = await res.json();
+        setScores([data]);
+      }
+    ).catch(
+      e => console.log(e)
+    );
+  };
+
+  const handleSubmit = () => {
+    fetchData();
   };
 
   return (
@@ -52,8 +63,12 @@ export default function Home() {
                 id="regNumber"
                 placeholder="Enter registration number"
                 className="border px-4 py-2 w-full rounded"
+                onChange={e => setCurrSbd(e.target.value)}
               />
-              <button className="bg-black text-white px-4 py-2 rounded">
+              <button
+                className="bg-black text-white px-4 py-2 rounded cursor-pointer"
+                onClick={() => handleSubmit()}
+              >
                 Submit
               </button>
             </div>
