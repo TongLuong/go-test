@@ -2,15 +2,15 @@ package com.gos.gos;
 
 public class ScoreDto {
     public String sbd;
-    public String toan;
-    public String ngu_van;
-    public String ngoai_ngu;
-    public String vat_li;
-    public String hoa_hoc;
-    public String sinh_hoc;
-    public String lich_su;
-    public String dia_li;
-    public String gdcd;
+    public Double toan;
+    public Double ngu_van;
+    public Double ngoai_ngu;
+    public Double vat_li;
+    public Double hoa_hoc;
+    public Double sinh_hoc;
+    public Double lich_su;
+    public Double dia_li;
+    public Double gdcd;
 
     public ScoreDto() {}
 

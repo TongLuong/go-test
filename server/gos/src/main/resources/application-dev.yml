@@ -6,9 +6,9 @@ logging:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/gos
-    username: lreas
-    password: lreas
+    url: jdbc:postgresql://gos-database:5433/gos
+    username: gos
+    password: gos
 
   jpa:
     generate-ddl: true

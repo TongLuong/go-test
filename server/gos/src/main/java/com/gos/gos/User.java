@@ -12,31 +12,31 @@ public class User {
     private String sbd;
 
     @Column(name = "toan")
-    private String toan;
+    private Double toan;
 
     @Column(name = "ngu_van")
-    private String ngu_van;
+    private Double ngu_van;
 
     @Column(name = "ngoai_ngu")
-    private String ngoai_ngu;
+    private Double ngoai_ngu;
 
     @Column(name = "vat_li")
-    private String vat_li;
+    private Double vat_li;
 
     @Column(name = "hoa_hoc")
-    private String hoa_hoc;
+    private Double hoa_hoc;
 
     @Column(name = "sinh_hoc")
-    private String sinh_hoc;
+    private Double sinh_hoc;
 
     @Column(name = "lich_su")
-    private String lich_su;
+    private Double lich_su;
 
     @Column(name = "dia_li")
-    private String dia_li;
+    private Double dia_li;
 
     @Column(name = "gdcd")
-    private String gdcd;
+    private Double gdcd;
 
     @Column(name = "ma_ngoai_ngu")
     private String ma_ngoai_ngu;

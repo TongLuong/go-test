@@ -2,11 +2,12 @@ package com.gos.gos;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Method;
+import java.util.*;
 
 @Service
 public class GosService {
@@ -17,44 +18,6 @@ public class GosService {
             UserRepository userRepository
     ) {
         this.userRepository = userRepository;
-
-//        try(InputStream is = DatabaseInitializer.class.getResourceAsStream("/diem_thi_thpt_2024.csv")) {
-//            if (is == null) {
-//                return;
-//            }
-//
-//            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-//            String[] header = reader.readLine().split(","); // ignore first line
-//
-//            String line;
-//            while ((line = reader.readLine()) != null) {
-//                String[] data = line.split(",", header.length);
-//
-//                // check existence
-//                User checkUser = userRepository.findBySbd(data[0]);
-//                if (checkUser != null) {
-//                    continue;
-//                }
-//
-//                User user = new User();
-//                user.setSbd(data[0]);
-//                user.setToan(data[1]);
-//                user.setNgu_van(data[2]);
-//                user.setNgoai_ngu(data[3]);
-//                user.setVat_li(data[4]);
-//                user.setHoa_hoc(data[5]);
-//                user.setSinh_hoc(data[6]);
-//                user.setLich_su(data[7]);
-//                user.setDia_li(data[8]);
-//                user.setGdcd(data[9]);
-//                user.setMa_ngoai_ngu(data[10]);
-//
-//                this.userRepository.save(user);
-//            }
-//        }
-//        catch(Exception e) {
-//            throw new RuntimeException(e);
-//        }
     }
 
     public ScoreDto getScore(
@@ -66,5 +29,52 @@ public class GosService {
         }
 
         return new ScoreDto(user);
+    }
+
+    public List<StatisticDto> getAllScores() {
+        String[] subjects = new String[] {
+                "Toan", "Ngu_van", "Ngoai_ngu", "Vat_li", "Hoa_hoc",
+                "Sinh_hoc", "Lich_su", "Dia_li", "Gdcd"
+        };
+
+        List<StatisticDto> statistics = new LinkedList<>();
+        for (String subject : subjects) {
+            try {
+                Method method = userRepository.getClass().getMethod(
+                        "countBy" + subject,
+                        Double.class, Double.class
+                );
+                StatisticDto statisticDto = new StatisticDto();
+
+                statisticDto.subject = subject;
+                statisticDto.excellent = (Integer) method.invoke(userRepository, 10.0, 8.0);
+                statisticDto.good = (Integer) method.invoke(userRepository, 7.99, 6.0);
+                statisticDto.average = (Integer) method.invoke(userRepository, 5.99, 4.0);
+                statisticDto.belowAverage = (Integer) method.invoke(userRepository, 3.99, 0.0);
+
+                statistics.add(statisticDto);
+            }
+            catch (Exception e) {
+                return null;
+            }
+        }
+
+        return statistics;
+    }
+
+    public List<ScoreDto> listTop(Integer top) {
+        List<ScoreDto> scores = new LinkedList<>();
+        List<User> topUsers = userRepository.getTopByToanAndVat_liAndHoa_hoc();
+
+        for (User user : topUsers) {
+            if (top-- <= 0) {
+                return scores;
+            }
+
+            ScoreDto score = new ScoreDto(user);
+            scores.add(score);
+        }
+
+        return scores;
     }
 }
