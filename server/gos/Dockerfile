@@ -9,3 +9,5 @@ RUN ./mvnw wrapper:wrapper \
  && ./mvnw clean install
 
 CMD ["java", "-jar", "target/*.jar"]
+
+EXPOSE 4000
